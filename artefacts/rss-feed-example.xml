@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Your Website Name</title>
+    <link>https://www.yourwebsite.com</link>
+    <description>Brief description of your content</description>
+    
+    <item>
+      <title>First Article Title</title>
+      <link>https://www.yourwebsite.com/article1</link>
+      <description>Summary of your first article</description>
+      <pubDate>Wed, 26 Feb 2025 09:30:00 GMT</pubDate>
+      <guid>https://www.yourwebsite.com/article1</guid>
+    </item>
+    
+    <item>
+      <title>Second Article Title</title>
+      <link>https://www.yourwebsite.com/article2</link>
+      <description>Summary of your second article</description>
+      <pubDate>Tue, 25 Feb 2025 14:15:00 GMT</pubDate>
+      <guid>https://www.yourwebsite.com/article2</guid>
+    </item>
+  </channel>
+</rss>

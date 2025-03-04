@@ -1,0 +1,100 @@
+{
+  "thread": {
+    "promptTemplate": {
+      "project": {
+        "title": "rss-basic",
+        "description": "rss-basic",
+        "definition": {
+          "goal": "Create an RSS Feed from scratch that I can use on multiple sites",
+          "requirements": {
+            "explanation": "An RSS feed requires several XML tags and their attributes. See 'tags' for a description of required tags.",
+            "tags": [
+              "Show the RSS version used.",
+              "Hold the feed's metadata.",
+              "Show the feed's title.",
+              "Give the URL of the website linked to the feed.",
+              "Offer a short summary of the feed's content.",
+              "Contain each piece of content in the feed.",
+              "Show when the content was published.",
+              "Give a unique ID for each content item."
+            ],
+            "example": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n<rss version=\"2.0\">\r\n\r\n<channel>\r\n  <title>W3Schools Home Page<\/title>\r\n  <link>https:\/\/www.w3schools.com<\/link>\r\n  <description>Free web building tutorials<\/description>\r\n  <item>\r\n    <title>RSS Tutorial<\/title>\r\n    <link>https:\/\/www.w3schools.com\/xml\/xml_rss.asp<\/link>\r\n    <description>New RSS tutorial on W3Schools<\/description>\r\n  <\/item>\r\n  <item>\r\n    <title>XML Tutorial<\/title>\r\n    <link>https:\/\/www.w3schools.com\/xml<\/link>\r\n    <description>New XML tutorial on W3Schools<\/description>\r\n  <\/item>\r\n<\/channel>\r\n\r\n<\/rss>"
+          },
+          "setup": ["Node.js + ECMAScript modules"]
+        }
+      },
+      "prototype": {
+        "type": "Functional",
+        "typeDefinition": "Validates specific functional requirements or technical approaches"
+      },
+      "interactionGuidelines": {
+        "description": "The LLM should follow these guidelines throughout.",
+        "rules": {
+          "conciseByDefault": true,
+          "showCodeByDefault": false,
+          "askQuestionsWhenInDoubt": true,
+          "explainThinking": true,
+          "identifyCommonPatterns": true,
+          "identifySolutions": true,
+          "identifyRisks": true,
+          "identifyValue": true,
+          "highlightTradeoffs": true,
+          "considerSustainability": true,
+          "considerAccessibility": true,
+          "generateSnapshotOnRequest": true,
+          "proceedMethodically": true,
+          "confirmBeforeAdvancing": true,
+          "explainOneConceptAtATime": true,
+          "confirmDependenciesBeforeAdding": true
+        },
+        "terms": {
+          "thread": {
+            "definition": "The record of an interaction between a developer and an LLM. Contains the initial prompt template and a collection of snapshots.",
+            "purpose": "The thread serves as a breadcrumb trail through the development process, allowing both human developers and LLMs to retain context and coherence across multiple interactions. The developer is responsible for maintaining a record of the thread."
+          },
+          "promptTemplate": {
+            "definition": "Used to initialise a thread. Contains project-specific details, rules on how an LLM should interact and how it should format periodic summaries (snapshots). This document is a prompt template."
+          },
+          "snapshot": {
+            "definition": "A specific interaction state representative of progress to date. A snapshot should conform to the snapshot schema.",
+            "schema": {
+              "project": {
+                "title": "string",
+                "description": "string",
+                "definition": "string"
+              },
+              "prototype": { "type": "string", "definition": "string" },
+              "summary": "string"
+            }
+          }
+        }
+      }
+    },
+    "snapshots": [
+      {
+        "project": {
+          "title": "rss-basic",
+          "description": "rss-basic",
+          "definition": "Create an RSS Feed from scratch that can be used on multiple sites"
+        },
+        "prototype": {
+          "type": "Functional",
+          "definition": "Validates specific functional requirements or technical approaches"
+        },
+        "summary": "This project focuses on creating a standards-compliant RSS feed from scratch. RSS (Really Simple Syndication) is an XML-based format that allows websites to share content updates with subscribers. The feed must include essential XML tags such as the RSS version, channel metadata (title, link, description), and items with their own metadata (title, link, description, publication date, and unique ID). The goal is to develop a flexible RSS structure that can be implemented across multiple websites while maintaining proper syntax and adherence to RSS 2.0 standards."
+      },
+      {
+        "project": {
+          "title": "rss-basic",
+          "description": "rss-basic",
+          "definition": "Create an RSS Feed from scratch that can be used on multiple sites"
+        },
+        "prototype": {
+          "type": "Functional",
+          "definition": "Validates specific functional requirements or technical approaches"
+        },
+        "summary": "We've established the fundamental structure of an RSS feed, including required XML tags (XML declaration, RSS element, channel metadata, and item elements) and their proper nesting. We've covered the purpose of each tag and viewed a complete example of a basic RSS 2.0 feed structure. Now we're preparing to create a Node.js script that can automatically generate a valid RSS feed by scanning local HTML files, extracting the necessary metadata (titles, URLs, descriptions, publication dates), and outputting a properly formatted XML document that follows RSS 2.0 standards."
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "@pac/rssfeed",
+  "version": "0.0.1",
+  "description": "Simple RSS feed generator",
+  "author": "People and Code",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . && prettier --write . --log-level silent",
+    "start": "parcel && npm run static",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:e2e": "cypress open",
+    "test:e2e:headless": "cypress run",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "latest",
+    "@testing-library/dom": "latest",
+    "@testing-library/user-event": "latest",
+    "cypress": "latest",
+    "eslint": "latest",
+    "globals": "^15.14.0",
+    "jest": "latest",
+    "jest-environment-jsdom": "latest",
+    "parcel": "latest",
+    "prettier": "latest",
+    "stylelint": "latest",
+    "stylelint-config-standard": "latest"
+  },
+  "source": "./node/rss-generator.js",
+  "main": "./dist/main.js",
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "xmlbuilder2": "^3.1.1"
+  }
+}
