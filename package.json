@@ -1,6 +1,6 @@
 {
   "name": "@p-n-c/rssfeed",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Simple RSS feed generator",
   "author": "People and Code",
   "type": "module",

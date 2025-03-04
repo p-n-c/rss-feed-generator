@@ -6,7 +6,7 @@ Example
 import path from 'path'
 const __dirname = import.meta.dirname
 
-import { rssFeeder } from '@pac/rssfeed'
+import { rssFeeder } from '@p-n-c/rssfeed'
 
 const src = path.join(__dirname, 'src')
 
