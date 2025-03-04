@@ -29,8 +29,13 @@ export const getDirectory = (...pathPartsToFiles) => {
   return path.join(__dirname, ...pathPartsToFiles)
 }
 
+const extractItemsAfterRoot = arr => {
+  const srcIndex = arr.indexOf('src')
+  return srcIndex === -1 ? [] : arr.slice(srcIndex + 1)
+}
+
 // Extract metadata from HTML file
-export const extractMetadata = (filePath, baseUrl) => {
+export const extractMetadata = (filePath, baseUrl, options) => {
   try {
     // Read the HTML file
     const html = fs.readFileSync(filePath, 'utf8')
@@ -63,7 +68,10 @@ export const extractMetadata = (filePath, baseUrl) => {
 
     // Generate link from file path and base URL
     const relativePath = path.basename(filePath, '.html')
-    const link = new URL(relativePath, baseUrl).toString()
+    const parts = path.parse(filePath)?.dir?.split('/')
+    const suffix = extractItemsAfterRoot(parts)
+    const ancestors = suffix.join('/')
+    const link = new URL(ancestors + '/' + relativePath, baseUrl).toString()
 
     // Use file path as guid (could be more sophisticated in production)
     const guid = link
@@ -84,22 +92,43 @@ export const extractMetadata = (filePath, baseUrl) => {
 }
 
 // Generate RSS XML
-export const generateRssXml = (feedOptions, items) => {
+export const generateRssXml = (feedOptions, items, options) => {
   // Create the RSS document
   const rss = create({ version: '1.0', encoding: 'UTF-8' })
-    .ele('rss', { version: '2.0' })
+    .ele('rss')
+    .att('version', '2.0')
+    .att('xmlns:atom', 'http://www.w3.org/2005/Atom')
     .ele('channel')
+    .ele('atom:link')
+    .att('href', feedOptions.link)
+    .att('rel', 'self')
+    .att('type', 'application/rss+xml')
+    .up()
     .ele('title')
     .txt(feedOptions.title)
     .up()
     .ele('link')
     .txt(feedOptions.link)
     .up()
+    .ele('image')
+    .ele('url')
+    .txt(options.images.main)
+    .up()
+    .ele('title')
+    .txt(feedOptions.title)
+    .up()
+    .ele('link')
+    .txt(feedOptions.link)
+    .up()
+    .up()
     .ele('description')
     .txt(feedOptions.description)
     .up()
     .ele('lastBuildDate')
     .txt(new Date().toUTCString())
+    .up()
+    .ele('language')
+    .txt('en')
     .up()
 
   // Add each item to the channel
@@ -113,7 +142,7 @@ export const generateRssXml = (feedOptions, items) => {
       .txt(item.link)
       .up()
       .ele('description')
-      .txt(item.description)
+      .dat(`<img src="${options.images.main}"/>${item.description}`)
       .up()
       .ele('pubDate')
       .txt(item.pubDate)
@@ -131,5 +160,5 @@ export const feedOptions = {
   title: 'People and Code, At Your Disposal',
   link: 'https://people-and-code.com/',
   description: 'Latest articles from People and Code',
-  outputPath: 'feed.xml',
+  outputPath: 'feed.rss',
 }
