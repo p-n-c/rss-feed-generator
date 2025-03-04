@@ -1,0 +1,19 @@
+{
+  "name": "@pac/rssfeed",
+  "version": "0.0.1",
+  "description": "Simple RSS feed generator",
+  "author": "People and Code",
+  "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/p-n-c/rss-feed-generator.git"
+  },
+  "keywords": [
+    "rss",
+    "rss feed",
+    "rss feed generator"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/p-n-c/rss-feed-generator/blob/main/README.md"
+}

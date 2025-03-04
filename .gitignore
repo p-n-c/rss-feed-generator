@@ -9,7 +9,8 @@ cypress/videos/
 cypress/screenshots/
 
 # Production
-dist/
+dist/main.js
+dist/main.js.map
 build/
 .next/
 out/
