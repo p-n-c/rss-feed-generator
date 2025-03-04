@@ -36,5 +36,10 @@
   },
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "rss",
+    "rss feed",
+    "rss feed generator"
   ]
 }
