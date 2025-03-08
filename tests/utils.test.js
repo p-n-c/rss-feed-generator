@@ -290,17 +290,18 @@ describe('extractMetadata', () => {
     path.parse.mockReturnValue({ dir: '/src/blog' })
 
     // Setup other mocks
-    const mockOptions = {
-      images: { main: 'https://people-and-code.com/image.png' },
-      feed: {
-        title: 'People and Code, At Your Disposal',
-        link: 'https://people-and-code.com/',
-        description: 'Latest articles from People and Code',
-        outputPath: 'feed.rss',
-      },
+    const mockRoot = 'src'
+    const mockFeed = {
+      title: 'People and Code, At Your Disposal',
+      link: 'https://people-and-code.com/',
+      description: 'Latest articles from People and Code',
+      outputPath: 'feed.rss',
     }
-
-    const result = extractMetadata('/src/blog/test-article.html', mockOptions)
+    const result = extractMetadata(
+      '/src/blog/test-article.html',
+      mockRoot,
+      mockFeed
+    )
 
     expect(fs.readFileSync).toHaveBeenCalledWith(
       '/src/blog/test-article.html',
@@ -335,19 +336,18 @@ describe('extractMetadata', () => {
     path.parse.mockReturnValue({ dir: '/src/blog' })
 
     // Setup other mocks
-    const mockOptions = {
-      images: { main: 'https://people-and-code.com/image.png' },
-      feed: {
-        title: 'People and Code, At Your Disposal',
-        link: 'https://people-and-code.com/',
-        description: 'Latest articles from People and Code',
-        outputPath: 'feed.rss',
-      },
+    const mockRoot = 'src'
+    const mockFeed = {
+      title: 'People and Code, At Your Disposal',
+      link: 'https://people-and-code.com/',
+      description: 'Latest articles from People and Code',
+      outputPath: 'feed.rss',
     }
 
     const result = extractMetadata(
       '/src/blog/minimal-article.html',
-      mockOptions
+      mockRoot,
+      mockFeed
     )
 
     expect(result).toEqual({
@@ -368,10 +368,8 @@ describe('extractMetadata', () => {
     // Mock console.error
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
-    const result = extractMetadata('/nonexistent/file.html', {
-      feed: {
-        link: 'https://people-and-code.com/',
-      },
+    const result = extractMetadata('/nonexistent/file.html', 'src', {
+      link: 'https://people-and-code.com/',
     })
 
     expect(fs.readFileSync).toHaveBeenCalled()
@@ -385,15 +383,15 @@ describe('extractMetadata', () => {
 describe('generateRssXml', () => {
   it('should generate valid RSS XML', () => {
     // Sample feed options and items
+    const feed = {
+      title: 'People and Code, At Your Disposal',
+      link: 'https://people-and-code.com/',
+      description: 'Latest articles from People and Code',
+      outputPath: 'feed.rss',
+    }
     const options = {
       images: {
         main: 'https://people-and-code.com/image.png',
-      },
-      feed: {
-        title: 'People and Code, At Your Disposal',
-        link: 'https://people-and-code.com/',
-        description: 'Latest articles from People and Code',
-        outputPath: 'feed.rss',
       },
     }
 
@@ -428,7 +426,7 @@ describe('generateRssXml', () => {
       }
     }
 
-    const result = generateRssXml(items, options)
+    const result = generateRssXml(items, feed, options)
 
     // Restore original Date
     global.Date = originalDate
@@ -454,15 +452,15 @@ describe('generateRssXml', () => {
   })
 
   it('should handle empty items array', () => {
+    const feed = {
+      title: 'People and Code, At Your Disposal',
+      link: 'https://people-and-code.com/',
+      description: 'Latest articles from People and Code',
+      outputPath: 'feed.rss',
+    }
     const options = {
       images: {
         main: 'https://people-and-code.com/image.png',
-      },
-      feed: {
-        title: 'People and Code, At Your Disposal',
-        link: 'https://people-and-code.com/',
-        description: 'Latest articles from People and Code',
-        outputPath: 'feed.rss',
       },
     }
 
@@ -476,7 +474,7 @@ describe('generateRssXml', () => {
       }
     }
 
-    const result = generateRssXml([], options)
+    const result = generateRssXml([], feed, options)
 
     // Restore original Date
     global.Date = originalDate

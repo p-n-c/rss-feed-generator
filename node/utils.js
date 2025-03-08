@@ -88,8 +88,8 @@ const extractItemsAfterRoot = (arr, root) => {
 }
 
 // Extract metadata from HTML file
-export const extractMetadata = (filePath, options) => {
-  const baseUrl = options.feed.link
+export const extractMetadata = (filePath, root, feed) => {
+  const baseUrl = feed.link
 
   try {
     // Read the HTML file
@@ -124,7 +124,7 @@ export const extractMetadata = (filePath, options) => {
     // Generate link from file path and base URL
     const relativePath = path.basename(filePath, '.html')
     const parts = path.parse(filePath)?.dir?.split('/')
-    const suffix = extractItemsAfterRoot(parts, options.root)
+    const suffix = extractItemsAfterRoot(parts, root)
     const ancestors = suffix.join('/')
     const link = new URL(ancestors + '/' + relativePath, baseUrl).toString()
 
@@ -147,7 +147,7 @@ export const extractMetadata = (filePath, options) => {
 }
 
 // Generate RSS XML
-export const generateRssXml = (items, options) => {
+export const generateRssXml = (items, feed, options) => {
   // Create the RSS document
   const rss = create({ version: '1.0', encoding: 'UTF-8' })
     .ele('rss')
@@ -155,29 +155,29 @@ export const generateRssXml = (items, options) => {
     .att('xmlns:atom', 'http://www.w3.org/2005/Atom')
     .ele('channel')
     .ele('atom:link')
-    .att('href', options.feed.link)
+    .att('href', feed.link)
     .att('rel', 'self')
     .att('type', 'application/rss+xml')
     .up()
     .ele('title')
-    .txt(options.feed.title)
+    .txt(feed.title)
     .up()
     .ele('link')
-    .txt(options.feed.link)
+    .txt(feed.link)
     .up()
     .ele('image')
     .ele('url')
     .txt(options.images.main)
     .up()
     .ele('title')
-    .txt(options.feed.title)
+    .txt(feed.title)
     .up()
     .ele('link')
-    .txt(options.feed.link)
+    .txt(feed.link)
     .up()
     .up()
     .ele('description')
-    .txt(options.feed.description)
+    .txt(feed.description)
     .up()
     .ele('lastBuildDate')
     .txt(new Date().toUTCString())

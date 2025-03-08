@@ -46,20 +46,20 @@ describe('generateRssFeed', () => {
 
   it('should generate an RSS feed from HTML files', async () => {
     const src = '/src/blog'
+    const feed = {
+      title: 'People and Code, At Your Disposal',
+      link: 'https://people-and-code.com/',
+      description: 'Latest articles from People and Code',
+      outputPath: 'feed.rss',
+    }
     const options = {
       images: {
         main: 'https://people-and-code.com/image.png',
       },
       pathsToExclude: [],
-      feed: {
-        title: 'People and Code, At Your Disposal',
-        link: 'https://people-and-code.com/',
-        description: 'Latest articles from People and Code',
-        outputPath: 'feed.rss',
-      },
     }
 
-    await generateRssFeed(src, options)
+    await generateRssFeed(src, 'src', feed, options)
 
     // Verify the workflow
     expect(utils.scanHtmlFiles).toHaveBeenCalledWith(src, options)
@@ -67,11 +67,13 @@ describe('generateRssFeed', () => {
 
     expect(utils.extractMetadata).toHaveBeenCalledWith(
       '/src/blog/article1.html',
-      options
+      'src',
+      feed
     )
     expect(utils.extractMetadata).toHaveBeenCalledWith(
       '/src/blog/article2.html',
-      options
+      'src',
+      feed
     )
 
     expect(utils.generateRssXml).toHaveBeenCalledWith(
@@ -91,11 +93,12 @@ describe('generateRssFeed', () => {
           guid: 'https://people-and-code.com/blog/article2',
         },
       ],
+      feed,
       options
     )
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
-      options.feed.outputPath,
+      feed.outputPath,
       '<?xml version="1.0" encoding="UTF-8"?><rss>Mock RSS content</rss>'
     )
   })
@@ -104,23 +107,23 @@ describe('generateRssFeed', () => {
     utils.scanHtmlFiles.mockReturnValue([])
 
     const src = '/empty/directory'
+    const feed = {
+      title: 'People and Code, At Your Disposal',
+      link: 'https://people-and-code.com/',
+      description: 'Latest articles from People and Code',
+      outputPath: 'feed.rss',
+    }
     const options = {
       images: {
         main: 'https://people-and-code.com/image.png',
       },
-      feed: {
-        title: 'People and Code, At Your Disposal',
-        link: 'https://people-and-code.com/',
-        description: 'Latest articles from People and Code',
-        outputPath: 'feed.rss',
-      },
     }
 
-    await generateRssFeed(src, options)
+    await generateRssFeed(src, 'src', feed, options)
 
     expect(utils.scanHtmlFiles).toHaveBeenCalledWith(src, options)
     expect(utils.extractMetadata).not.toHaveBeenCalled()
-    expect(utils.generateRssXml).toHaveBeenCalledWith([], options)
+    expect(utils.generateRssXml).toHaveBeenCalledWith([], feed, options)
     expect(fs.writeFileSync).toHaveBeenCalled()
   })
 
@@ -128,23 +131,23 @@ describe('generateRssFeed', () => {
     utils.extractMetadata.mockReturnValue(null)
 
     const src = '/src/blog'
+    const feed = {
+      title: 'People and Code, At Your Disposal',
+      link: 'https://people-and-code.com/',
+      description: 'Latest articles from People and Code',
+      outputPath: 'feed.rss',
+    }
     const options = {
       images: {
         main: 'https://people-and-code.com/image.png',
       },
-      feed: {
-        title: 'People and Code, At Your Disposal',
-        link: 'https://people-and-code.com/',
-        description: 'Latest articles from People and Code',
-        outputPath: 'feed.rss',
-      },
     }
 
-    await generateRssFeed(src, options)
+    await generateRssFeed(src, 'src', feed, options)
 
     expect(utils.scanHtmlFiles).toHaveBeenCalledWith(src, options)
     expect(utils.extractMetadata).toHaveBeenCalledTimes(2)
-    expect(utils.generateRssXml).toHaveBeenCalledWith([], options)
+    expect(utils.generateRssXml).toHaveBeenCalledWith([], feed, options)
     expect(fs.writeFileSync).toHaveBeenCalled()
   })
 })
