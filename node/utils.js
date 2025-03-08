@@ -6,23 +6,6 @@ import { create } from 'xmlbuilder2' // For creating XML
 import { __dirname } from './dirname.js'
 
 // Scan directory for HTML files
-// export const scanHtmlFiles = directory => {
-//   const htmlFiles = []
-
-//   try {
-//     const files = fs.readdirSync(directory, { recursive: true })
-
-//     for (const file of files) {
-//       if (path.extname(file).toLowerCase() === '.html') {
-//         htmlFiles.push(path.join(directory, file))
-//       }
-//     }
-//   } catch (error) {
-//     console.error(`Error scanning directory: ${error.message}`)
-//   }
-
-//   return htmlFiles
-// }
 export const scanHtmlFiles = (directory, options = {}) => {
   const htmlFiles = []
   const { pathsToExclude = [] } = options
