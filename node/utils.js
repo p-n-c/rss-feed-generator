@@ -6,15 +6,51 @@ import { create } from 'xmlbuilder2' // For creating XML
 import { __dirname } from './dirname.js'
 
 // Scan directory for HTML files
-export const scanHtmlFiles = directory => {
+export const scanHtmlFiles = (directory, options = {}) => {
   const htmlFiles = []
+  const { pathsToExclude = [] } = options
 
   try {
     const files = fs.readdirSync(directory, { recursive: true })
 
     for (const file of files) {
       if (path.extname(file).toLowerCase() === '.html') {
-        htmlFiles.push(path.join(directory, file))
+        // Get the full path
+        const fullPath = path.join(directory, file)
+
+        // Get relative path by removing the base directory
+        // and normalize it to use forward slashes for consistency
+        let relPath = file.split(path.sep).join('/')
+
+        // Ensure the path starts with a forward slash for matching
+        if (!relPath.startsWith('/')) {
+          relPath = '/' + relPath
+        }
+
+        // Check if this path should be excluded
+        const shouldExclude = pathsToExclude.some(pattern => {
+          // Exact path match
+          if (pattern === relPath) {
+            return true
+          }
+
+          // Root directory match
+          if (pattern === '/' && !relPath.substring(1).includes('/')) {
+            return true
+          }
+
+          // Wildcard pattern (directory/*)
+          if (pattern.endsWith('/*')) {
+            const prefix = pattern.slice(0, -1) // Remove the *
+            return relPath.startsWith(prefix)
+          }
+
+          return false
+        })
+
+        if (!shouldExclude) {
+          htmlFiles.push(fullPath)
+        }
       }
     }
   } catch (error) {
@@ -29,13 +65,15 @@ export const getDirectory = (...pathPartsToFiles) => {
   return path.join(__dirname, ...pathPartsToFiles)
 }
 
-const extractItemsAfterRoot = arr => {
-  const srcIndex = arr.indexOf('src')
+const extractItemsAfterRoot = (arr, root) => {
+  const srcIndex = arr.indexOf(root)
   return srcIndex === -1 ? [] : arr.slice(srcIndex + 1)
 }
 
 // Extract metadata from HTML file
-export const extractMetadata = (filePath, baseUrl, options) => {
+export const extractMetadata = (filePath, root, feed) => {
+  const baseUrl = feed.link
+
   try {
     // Read the HTML file
     const html = fs.readFileSync(filePath, 'utf8')
@@ -69,7 +107,7 @@ export const extractMetadata = (filePath, baseUrl, options) => {
     // Generate link from file path and base URL
     const relativePath = path.basename(filePath, '.html')
     const parts = path.parse(filePath)?.dir?.split('/')
-    const suffix = extractItemsAfterRoot(parts)
+    const suffix = extractItemsAfterRoot(parts, root)
     const ancestors = suffix.join('/')
     const link = new URL(ancestors + '/' + relativePath, baseUrl).toString()
 
@@ -92,7 +130,7 @@ export const extractMetadata = (filePath, baseUrl, options) => {
 }
 
 // Generate RSS XML
-export const generateRssXml = (feedOptions, items, options) => {
+export const generateRssXml = (items, feed, options) => {
   // Create the RSS document
   const rss = create({ version: '1.0', encoding: 'UTF-8' })
     .ele('rss')
@@ -100,29 +138,29 @@ export const generateRssXml = (feedOptions, items, options) => {
     .att('xmlns:atom', 'http://www.w3.org/2005/Atom')
     .ele('channel')
     .ele('atom:link')
-    .att('href', feedOptions.link)
+    .att('href', feed.link)
     .att('rel', 'self')
     .att('type', 'application/rss+xml')
     .up()
     .ele('title')
-    .txt(feedOptions.title)
+    .txt(feed.title)
     .up()
     .ele('link')
-    .txt(feedOptions.link)
+    .txt(feed.link)
     .up()
     .ele('image')
     .ele('url')
     .txt(options.images.main)
     .up()
     .ele('title')
-    .txt(feedOptions.title)
+    .txt(feed.title)
     .up()
     .ele('link')
-    .txt(feedOptions.link)
+    .txt(feed.link)
     .up()
     .up()
     .ele('description')
-    .txt(feedOptions.description)
+    .txt(feed.description)
     .up()
     .ele('lastBuildDate')
     .txt(new Date().toUTCString())
@@ -154,11 +192,4 @@ export const generateRssXml = (feedOptions, items, options) => {
 
   // Convert to XML string with pretty formatting
   return rss.end({ prettyPrint: true })
-}
-
-export const feedOptions = {
-  title: 'People and Code, At Your Disposal',
-  link: 'https://people-and-code.com/',
-  description: 'Latest articles from People and Code',
-  outputPath: 'feed.rss',
 }
