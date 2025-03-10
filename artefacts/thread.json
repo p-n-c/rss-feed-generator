@@ -1,9 +1,9 @@
 {
   "thread": {
-    "promptTemplate": {
+    "threadPrompt": {
       "project": {
         "title": "rss-basic",
-        "description": "rss-basic",
+        "description": "Simple RSS feed generator",
         "definition": {
           "goal": "Create an RSS Feed from scratch that I can use on multiple sites",
           "requirements": {
@@ -52,7 +52,7 @@
             "definition": "The record of an interaction between a developer and an LLM. Contains the initial prompt template and a collection of snapshots.",
             "purpose": "The thread serves as a breadcrumb trail through the development process, allowing both human developers and LLMs to retain context and coherence across multiple interactions. The developer is responsible for maintaining a record of the thread."
           },
-          "promptTemplate": {
+          "threadPrompt": {
             "definition": "Used to initialise a thread. Contains project-specific details, rules on how an LLM should interact and how it should format periodic summaries (snapshots). This document is a prompt template."
           },
           "snapshot": {
@@ -74,7 +74,7 @@
       {
         "project": {
           "title": "rss-basic",
-          "description": "rss-basic",
+          "description": "Simple RSS feed generator",
           "definition": "Create an RSS Feed from scratch that can be used on multiple sites"
         },
         "prototype": {
@@ -86,7 +86,7 @@
       {
         "project": {
           "title": "rss-basic",
-          "description": "rss-basic",
+          "description": "Simple RSS feed generator",
           "definition": "Create an RSS Feed from scratch that can be used on multiple sites"
         },
         "prototype": {
