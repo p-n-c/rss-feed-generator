@@ -138,7 +138,7 @@ export const generateRssXml = (items, feed, options) => {
     .att('xmlns:atom', 'http://www.w3.org/2005/Atom')
     .ele('channel')
     .ele('atom:link')
-    .att('href', feed.link)
+    .att('href', `${feed.link}/${feed.outputPath}`)
     .att('rel', 'self')
     .att('type', 'application/rss+xml')
     .up()
