@@ -88,6 +88,23 @@ export const extractMetadata = (filePath, root, feed) => {
       $('p').first().text().substring(0, 160) ||
       'No description available'
 
+    // Get image
+    const imageSrc = $('meta[property="og:image"]')?.attr('content') || null
+    const imageHeight =
+      $('meta[property="og:image:height"]')?.attr('content') || null
+    const imageWidth =
+      $('meta[property="og:image:width"]')?.attr('content') || null
+
+    let img = null
+
+    if (imageSrc) {
+      img = {
+        src: imageSrc,
+        height: imageHeight,
+        width: imageWidth,
+      }
+    }
+
     // Get publication date - first look for meta tag, fallback to file stats
     let pubDate =
       $('meta[name="date"]').attr('content') ||
@@ -120,6 +137,7 @@ export const extractMetadata = (filePath, root, feed) => {
       description,
       pubDate: formattedDate,
       guid,
+      img,
     }
   } catch (error) {
     console.error(
@@ -180,7 +198,7 @@ export const generateRssXml = (items, feed, options) => {
       .txt(item.link)
       .up()
       .ele('description')
-      .dat(`<img src="${options.images.main}"/>${item.description}`)
+      .dat(addImage())
       .up()
       .ele('pubDate')
       .txt(item.pubDate)
@@ -188,6 +206,14 @@ export const generateRssXml = (items, feed, options) => {
       .ele('guid')
       .txt(item.guid)
       .up()
+
+    function addImage() {
+      if (item.img) {
+        return `<img src="${item.img.src}"/>${item.description}`
+      } else {
+        return `<img src="${options.images.main}"/>${item.description}`
+      }
+    }
   })
 
   // Convert to XML string with pretty formatting
